@@ -55,8 +55,9 @@ class Plugin:
         for key, val in results.items():
             for k, v in val.items():
                 if v['status'] == "success":
-                    colour = Colours.OKGREEN
-                elif v['status'] == "failed":
+                    continue
+
+                if v['status'] == "failed":
                     colour = Colours.FAIL
                 else:
                     colour = Colours.GREY
