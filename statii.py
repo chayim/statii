@@ -31,8 +31,8 @@ p.add_option('-l', '--list-modules', action='store_true', dest="LISTMODULES",
              help="List the supported modules")
 p.add_option('-P', '--plugin-dir', action='append', dest='PLUGINDIRS',
              help="Directories from which to load plugins")
-p.add_option('-p', '--plugin', action='store', dest='PLUGIN',
-             help="Plugin to execute")
+p.add_option('-p', '--plugin', action='append', dest='PLUGIN',
+             help="Plugin(s) to execute")
 p.add_option('-n', '--notify', action='store_true', dest="NOTIFY",
              help="Send notifications for results")
 p.add_option('-c', '--config', action='store', dest="CONFFILE",
@@ -73,11 +73,15 @@ for plug in opts.PLUGINDIRS:
         sys.path.append(plug)
 
 if opts.PLUGIN:
-    try:
-        poll = int(opts.POLLING_DELAY)
-    except TypeError:
-        poll = 0
-    run_plugin(opts.PLUGIN, conffile, opts.NOTIFY, poll)
+    for plug in opts.PLUGIN:
+        sys.stderr.write(f"----------- {plug} --------\n\n")
+        try:
+            poll = int(opts.POLLING_DELAY)
+        except TypeError:
+            poll = 0
+        run_plugin(plug, conffile, opts.NOTIFY, poll)
+        sys.stderr.write("\n")
+    sys.exit(0)
 
 if opts.ALL:
 

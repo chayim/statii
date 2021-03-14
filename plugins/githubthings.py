@@ -12,6 +12,7 @@ class PRData:
         for k, v in kwargs.items():
             setattr(self, k.upper(), v)
 
+
 IssueData = PRData
 
 
