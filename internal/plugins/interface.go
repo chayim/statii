@@ -1,10 +1,13 @@
 package plugins
 
+import (
+	"github.com/go-playground/validator/v10"
+	"gopkg.in/yaml.v3"
+)
+
 // representing the configuration file
 type Config struct {
-	Timeout int    `yaml:"timeout"`
 	Plugins Plugin `yaml:"plugins"`
-	Redis   string `yaml:"redis_url"`
 }
 
 // plugins
@@ -15,5 +18,22 @@ type Plugin struct {
 }
 
 type PluginBase struct {
-	Name string `yaml:"name"`
+	Timeout int    `yaml:"timeout" validate:"required number"`
+	Name    string `yaml:"name" validate:"required"`
+}
+
+// NewConfigFromBytes returns a Config object, read from the YAML byte stream
+func NewConfigFromBytes(b []byte) (*Config, error) {
+	cfg := Config{}
+	err := yaml.Unmarshal(b, &cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	v := validator.New()
+	err = v.Struct(cfg)
+	if err != nil {
+		return nil, err
+	}
+	return &cfg, err
 }

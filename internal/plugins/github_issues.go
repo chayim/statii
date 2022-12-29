@@ -17,8 +17,8 @@ import (
 var GITHUB_ISSUE_CONFIG string = "github_issue"
 
 type GitHubIssueConfig struct {
-	Token        string   `yaml:"token"`
-	Repositories []string `yaml:"repositories"`
+	Token        string   `yaml:"token" validate:"required"`
+	Repositories []string `yaml:"repositories" validate:"required"`
 	States       []string `yaml:"states"`
 	PluginBase
 }

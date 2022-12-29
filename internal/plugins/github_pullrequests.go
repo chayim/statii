@@ -17,8 +17,8 @@ import (
 var GITHUB_PR_CONFIG string = "github_pullrequest"
 
 type GitHubPullRequestConfig struct {
-	Token        string   `yaml:"token"`
-	Repositories []string `yaml:"repositories"`
+	Token        string   `yaml:"token" validate:"required"`
+	Repositories []string `yaml:"repositories" validate:"required"`
 	States       []string `yaml:"states,omitempty"`
 	PluginBase
 }
