@@ -8,13 +8,15 @@ import (
 
 type Message struct {
 	ID     string `json:"id"`
+	Source string `json:"source"`
 	Title  string `json:"title"`
 	URL    string `json:"url"`
 	Status string `json:"status"`
 }
 
-func NewMessage(id, title, url, status string) *Message {
+func NewMessage(id, source, title, url, status string) *Message {
 	m := &Message{ID: id,
+		Source: source,
 		Title:  title,
 		URL:    url,
 		Status: status,
@@ -22,7 +24,7 @@ func NewMessage(id, title, url, status string) *Message {
 	return m
 }
 
-func (m *Message) Format() []byte {
+func (m *Message) Dump() []byte {
 	b, err := json.Marshal(m)
 	if err != nil {
 		log.Fatalf("could not format message: %v", err)
@@ -31,7 +33,11 @@ func (m *Message) Format() []byte {
 }
 
 // TODO store the data
-func (m *Message) Store(redisURL string) error {
+func (m *Message) Store() {
 	// connect to redis
 	// save
+}
+
+func Store(m []Message) {
+
 }
