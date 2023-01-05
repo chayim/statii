@@ -31,13 +31,3 @@ func (m *Message) Dump() []byte {
 	}
 	return b
 }
-
-// TODO store the data
-func (m *Message) Store() {
-	// connect to redis
-	// save
-}
-
-func Store(m []Message) {
-
-}
