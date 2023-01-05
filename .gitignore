@@ -1,3 +1,5 @@
 __pycache__
 statii
 .env
+statii.conf
+dump.rdb

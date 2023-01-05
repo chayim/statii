@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/go-redis/redis/v9"
+	log "github.com/sirupsen/logrus"
 )
 
 type Store struct {
@@ -27,22 +28,29 @@ func (s *Store) Clear(ctx context.Context) error {
 	return err
 }
 
-// TODO write database tests
 func (s *Store) SaveMany(ctx context.Context, messages []*Message) error {
+
+	if len(messages) == 0 {
+		return nil
+	}
+
 	pipe := s.DB.Pipeline()
 	for _, msg := range messages {
 		bytes, _ := json.Marshal(msg)
 		pipe.LPush(ctx, s.StreamName, bytes)
 	}
 	pipe.LTrim(ctx, s.StreamName, 0, s.Size-1)
+	log.Debugf("saving to redis at %s", s.DB)
 	_, err := pipe.Exec(ctx)
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 	return nil
 }
 
 func (s *Store) ReadAll(ctx context.Context) ([]*Message, error) {
+	log.Debug("reading from redis")
 	res, err := s.DB.LPopCount(ctx, s.StreamName, int(s.Size)).Result()
 	if err != nil {
 		return nil, err

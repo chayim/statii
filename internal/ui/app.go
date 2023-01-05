@@ -9,6 +9,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/go-co-op/gocron"
 	"github.com/rivo/tview"
+	log "github.com/sirupsen/logrus"
 )
 
 var app = tview.NewApplication()
@@ -16,6 +17,7 @@ var app = tview.NewApplication()
 // processMessages retrieves messages from a redis stream and stores
 // the messages on the table
 func processMessages(t *tview.Table, cfg *plugins.Config) {
+	log.Debug("processing table messages")
 	con := comms.NewConnection(cfg.Database, cfg.Size)
 
 	ctx := context.TODO()
@@ -50,9 +52,9 @@ func RunApp(cfg *plugins.Config) {
 	layout.AddItem(messages, 0, 1, true)
 	layout.AddItem(text, 1, 1, false)
 
-	// TODO handle this via goroutine or go-cron
+	// TODO handle this via goroutine
 	s := gocron.NewScheduler(time.UTC)
-	s.Every(cfg.RescheduleEvery).Seconds().Do(processMessages, messages, cfg)
+	s.Every(30).Seconds().Do(processMessages, messages, cfg) // TODO something about the time for UI refresh
 	s.StartAsync()
 
 	if err := app.SetRoot(layout, true).EnableMouse(true).Run(); err != nil {

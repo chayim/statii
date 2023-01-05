@@ -1,0 +1,10 @@
+---
+
+version: "3.8"
+
+services:
+  redis-stack:
+    container_name: redis-stack
+    image: redis:7.0.6
+    ports:
+      - "9876:6379"

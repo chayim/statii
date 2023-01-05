@@ -1,0 +1,13 @@
+num_notifications: 30
+reschedule_seconds: 100
+database: localhost:6379
+plugins:
+
+  github_issues:
+    - name: my issues
+      token: <my redacted token>
+      states:
+        - open
+      repositories:
+        - someorg/repository
+        - someotherorg/repository

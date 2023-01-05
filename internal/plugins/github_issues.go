@@ -20,6 +20,7 @@ type GitHubIssueConfig struct {
 	Token        string   `yaml:"token" validate:"required"`
 	Repositories []string `yaml:"repositories" validate:"required"`
 	States       []string `yaml:"states"`
+	Assignee     string   `yaml:"assignee"`
 	PluginBase
 }
 
@@ -35,12 +36,16 @@ func (g *GitHubIssueConfig) Gather(ctx context.Context, since time.Time) []*comm
 	var messages []*comms.Message
 
 	for _, repo := range g.Repositories {
+		log.WithFields(log.Fields{"config": g.Name, "repo": repo}).Debug("github issues")
 		parts := strings.Split(repo, "/")
 		if len(parts) != 2 {
 			log.Warnf("%s is an invalid repository, skipping.", repo)
 			continue
 		}
 		opts := github.IssueListByRepoOptions{State: "all", Sort: "updated", Direction: "desc"}
+		if g.Assignee != "" {
+			opts.Assignee = g.Assignee
+		}
 		issues, _, err := client.Issues.ListByRepo(ctx, parts[0], parts[1], &opts)
 		if err != nil {
 			log.Errorf("error on %s: %v", repo, err)
