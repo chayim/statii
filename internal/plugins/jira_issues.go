@@ -42,7 +42,7 @@ func (j *JiraIssue) Gather(ctx context.Context, since time.Time) []*comms.Messag
 		return nil
 	}
 	if resp.StatusCode != http.StatusOK {
-		log.Warnf("no results returned from jira %s", j.Name)
+		log.Debug("no results returned from jira %s", j.Name)
 		return nil
 	}
 

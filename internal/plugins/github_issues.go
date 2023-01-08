@@ -39,7 +39,7 @@ func (g *GitHubIssueConfig) Gather(ctx context.Context, since time.Time) []*comm
 		log.WithFields(log.Fields{"config": g.Name, "repo": repo}).Debug("github issues")
 		parts := strings.Split(repo, "/")
 		if len(parts) != 2 {
-			log.Warnf("%s is an invalid repository, skipping.", repo)
+			log.Debug("%s is an invalid repository, skipping.", repo)
 			continue
 		}
 		opts := github.IssueListByRepoOptions{State: "all", Sort: "updated", Direction: "desc"}

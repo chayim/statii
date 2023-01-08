@@ -62,6 +62,7 @@ func TestSaveMany(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			connstr = "localhost:6379"
 			con := NewConnection(connstr, size)
 			ctx := context.Background()
 

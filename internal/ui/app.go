@@ -9,7 +9,6 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/go-co-op/gocron"
 	"github.com/rivo/tview"
-	log "github.com/sirupsen/logrus"
 )
 
 var app = tview.NewApplication()
@@ -17,7 +16,6 @@ var app = tview.NewApplication()
 // processMessages retrieves messages from a redis stream and stores
 // the messages on the table
 func processMessages(t *tview.Table, cfg *plugins.Config) {
-	log.Debug("processing table messages")
 	con := comms.NewConnection(cfg.Database, cfg.Size)
 
 	ctx := context.TODO()
