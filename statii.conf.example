@@ -26,3 +26,14 @@ plugins:
         - merged
       repositories:
         - thisorgtoo/foorepo
+
+  webpages:
+    - name: These google searches
+      urls:
+        - http://google.com/search?foo
+        - http://google.com/search?bar
+    - name: Authenticatd page
+      username: human
+      password: being
+      urls:
+        - https://my.network

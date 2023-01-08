@@ -25,6 +25,7 @@ type Config struct {
 type Plugin struct {
 	GitHubIssues       []GitHubIssueConfig       `yaml:"github_issues,omitempty"`
 	GitHubPullRequests []GitHubPullRequestConfig `yaml:"github_pullrequests,omitempty"`
+	URLs               []URLConfig               `yaml:"webpages,omitempty"`
 	JiraIssues         []JiraIssue               `yaml:"jira_issues,omitempty"`
 }
 
