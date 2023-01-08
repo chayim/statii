@@ -37,7 +37,7 @@ func (g *GitHubPullRequestConfig) Gather(ctx context.Context, since time.Time) [
 	for _, repo := range g.Repositories {
 		parts := strings.Split(repo, "/")
 		if len(parts) != 2 {
-			log.Warnf("%s is an invalid repository, skipping.", repo)
+			log.Debug("%s is an invalid repository, skipping.", repo)
 			continue
 		}
 

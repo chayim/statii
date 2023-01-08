@@ -1,6 +1,7 @@
 num_notifications: 30
 reschedule_seconds: 100
 database: localhost:6379
+
 plugins:
 
   github_issues:
@@ -11,3 +12,17 @@ plugins:
       repositories:
         - someorg/repository
         - someotherorg/repository
+
+    - name: my other issues
+      token: <my redacted token>
+      states:
+        - closed
+      repositories:
+        - thisorgtoo/foorepo
+
+  github_pullrequest:
+      token: <my redacted token>
+      states:
+        - merged
+      repositories:
+        - thisorgtoo/foorepo
