@@ -14,8 +14,6 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var GITHUB_PR_CONFIG string = "github_pullrequest"
-
 type GitHubPullRequestConfig struct {
 	Token        string   `yaml:"token" validate:"required"`
 	Repositories []string `yaml:"repositories" validate:"required"`
@@ -37,7 +35,7 @@ func (g *GitHubPullRequestConfig) Gather(ctx context.Context, since time.Time) [
 	for _, repo := range g.Repositories {
 		parts := strings.Split(repo, "/")
 		if len(parts) != 2 {
-			log.Debug("%s is an invalid repository, skipping.", repo)
+			log.Debugf("%s is an invalid repository, skipping.", repo)
 			continue
 		}
 
@@ -48,7 +46,7 @@ func (g *GitHubPullRequestConfig) Gather(ctx context.Context, since time.Time) [
 			continue
 		}
 
-		source := fmt.Sprintf("Github [%s]", parts[1])
+		source := fmt.Sprintf("Github PR [%s]", parts[1])
 		for _, p := range pulls {
 			if !p.UpdatedAt.After(since) {
 				continue

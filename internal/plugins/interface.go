@@ -25,6 +25,7 @@ type Config struct {
 type Plugin struct {
 	GitHubIssues       []GitHubIssueConfig       `yaml:"github_issues,omitempty"`
 	GitHubPullRequests []GitHubPullRequestConfig `yaml:"github_pullrequests,omitempty"`
+	GitHubActions      []GitHubActionConfig      `yaml:"github_actions,omitempty"`
 	JiraIssues         []JiraIssue               `yaml:"jira_issues,omitempty"`
 }
 
@@ -86,6 +87,24 @@ func (c *Config) ProcessPlugins() {
 			var sg sync.WaitGroup
 			sg.Add(len(c.Plugins.GitHubPullRequests))
 			for _, g := range c.Plugins.GitHubPullRequests {
+				go func() {
+					messages := g.Gather(ctx, since)
+					con.SaveMany(ctx, messages)
+					sg.Done()
+				}()
+			}
+			sg.Wait()
+			wg.Done()
+		}()
+	}
+
+	if len(c.Plugins.GitHubActions) > 0 {
+		wg.Add(1)
+		go func() {
+			log.Debug("processing pull requests")
+			var sg sync.WaitGroup
+			sg.Add(len(c.Plugins.GitHubActions))
+			for _, g := range c.Plugins.GitHubActions {
 				go func() {
 					messages := g.Gather(ctx, since)
 					con.SaveMany(ctx, messages)
