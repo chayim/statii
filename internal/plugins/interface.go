@@ -117,6 +117,24 @@ func (c *Config) ProcessPlugins() {
 		}()
 	}
 
+	if len(c.Plugins.URLs) > 0 {
+		wg.Add(1)
+		go func() {
+			log.Debug("processing web pages")
+			var sg sync.WaitGroup
+			sg.Add(len(c.Plugins.URLs))
+			for _, g := range c.Plugins.URLs {
+				go func() {
+					messages := g.Gather(ctx, since)
+					con.SaveMany(ctx, messages)
+					sg.Done()
+				}()
+			}
+			sg.Wait()
+			wg.Done()
+		}()
+	}
+
 	// for _, g := range c.Plugins.JiraIssues {
 	// 	go func() {
 	// 		g.Gather(ctx, since)

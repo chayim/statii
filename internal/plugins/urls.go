@@ -38,12 +38,10 @@ func (u *URLConfig) Gather(ctx context.Context, since time.Time) []*comms.Messag
 
 		updated := resp.Header.Get("Last-Modified")
 		t, err := http.ParseTime(updated)
-		if err != nil {
-			log.Errorf("failed to parse time %s", updated)
-			return nil
-		}
-		if !t.After(since) {
-			continue
+		if err == nil {
+			if !t.After(since) {
+				continue
+			}
 		}
 		msg := comms.NewMessage(fmt.Sprintf("%s [%d]", u.Name, idx), url, u.Name, url,
 			strconv.FormatInt(int64(resp.StatusCode), 10))
