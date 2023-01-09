@@ -14,8 +14,6 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var GITHUB_ISSUE_CONFIG string = "github_issue"
-
 type GitHubIssueConfig struct {
 	Token        string   `yaml:"token" validate:"required"`
 	Repositories []string `yaml:"repositories" validate:"required"`
@@ -39,7 +37,7 @@ func (g *GitHubIssueConfig) Gather(ctx context.Context, since time.Time) []*comm
 		log.WithFields(log.Fields{"config": g.Name, "repo": repo}).Debug("github issues")
 		parts := strings.Split(repo, "/")
 		if len(parts) != 2 {
-			log.Debug("%s is an invalid repository, skipping.", repo)
+			log.Debugf("%s is an invalid repository, skipping.", repo)
 			continue
 		}
 		opts := github.IssueListByRepoOptions{State: "all", Sort: "updated", Direction: "desc"}
@@ -51,7 +49,7 @@ func (g *GitHubIssueConfig) Gather(ctx context.Context, since time.Time) []*comm
 			log.Errorf("error on %s: %v", repo, err)
 			continue
 		}
-		source := fmt.Sprintf("Github [%s]", parts[1])
+		source := fmt.Sprintf("Github Issue [%s]", parts[1])
 		for _, p := range issues {
 			if !p.UpdatedAt.After(since) {
 				continue

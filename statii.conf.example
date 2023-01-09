@@ -20,7 +20,8 @@ plugins:
       repositories:
         - thisorgtoo/foorepo
 
-  github_pullrequest:
+  github_pullrequests:
+    - name: pull request on thisorg
       token: <my redacted token>
       states:
         - merged
@@ -37,3 +38,14 @@ plugins:
       password: being
       urls:
         - https://my.network
+        
+  github_actions:
+    - name: actions for redis-py
+      token: <my redacted token>
+      repository:
+        - redis/redis-py
+      workflows:
+        - integration.yml
+        - stale-issues.yml
+      branches:
+        - master
