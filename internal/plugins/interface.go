@@ -14,7 +14,6 @@ import (
 
 // representing the configuration file
 type Config struct {
-	// TODO add defaults
 	Plugins         Plugin `yaml:"plugins"`
 	RescheduleEvery int    `yaml:"reschedule_seconds" validate:"min=60,max=1200"`
 	Database        string `yaml:"database"`

@@ -1,12 +1,22 @@
+# number of rows to display in the terminal
 num_notifications: 30
+
+# how often data is refreshed (in seconds)
 reschedule_seconds: 100
+
+# the host:port combination, for the redis server address
 database: localhost:6379
 
+# multiple entries can be made of any plugin, assuming each
+# begins with a name entry.
 plugins:
 
+  # github issues to track
   github_issues:
+
     - name: my issues
       token: <my redacted token>
+      # a list of states, as those exposed by the GitHub UI. Used to filter, if they exist.
       states:
         - open
       repositories:
@@ -15,11 +25,15 @@ plugins:
 
     - name: my other issues
       token: <my redacted token>
+
+      # a list of states, as those exposed by the GitHub UI. Used to filter, if they exist.
       states:
         - closed
+
       repositories:
         - thisorgtoo/foorepo
 
+  # github pull requests to display
   github_pullrequests:
     - name: pull request on thisorg
       token: <my redacted token>
@@ -28,22 +42,28 @@ plugins:
       repositories:
         - thisorgtoo/foorepo
 
+  # update the table, when these web pages chanage
   webpages:
     - name: These google searches
       urls:
         - http://google.com/search?foo
         - http://google.com/search?bar
-    - name: Authenticatd page
+
+    # a second example, for a web page using HTTP Basic Auth
+    - name: Authenticated page
       username: human
       password: being
       urls:
         - https://my.network
         
+  # github actions whose status should be tracked
   github_actions:
     - name: actions for redis-py
       token: <my redacted token>
       repository:
         - redis/redis-py
+
+      # each workflow must be a separate file in the .github/workflows directory for the repository
       workflows:
         - integration.yml
         - stale-issues.yml

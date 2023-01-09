@@ -4,7 +4,7 @@ Statii is a terminal application for displaying notifications from various servi
 
 In some cases, notifcations aren't made available for the systems in question - and statii becomes your way to write custom plugins to surface them.
 
-Statii will draw a self-updating table, in the terminal. As of this writing, it updates every 30 seconds, but will properly support async updates in future versions. Clicking on any table row will open the associated notification link, in your browser.
+Statii will draw a self-updating table, in the terminal. As of this writing, it updates every 30 seconds, but will properly support async updates in future versions. Clicking on any table row will open the associated notification link, in your browser, and statii will continue to run.
 
 ## Building
 
@@ -14,4 +14,6 @@ Statii requires [go version 1.19](https://go.dev/) or higher and [gnu make](http
 
 Configure your statii.conf - as per the [example file](statii.conf.example), and run the application via ```./statii```
 
-*./statii --help* provides useful output.
+### Configuration
+
+Each statii section must contain an identifying name element, in addition to the configuration options for the underlying plugin.
