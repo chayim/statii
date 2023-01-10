@@ -46,10 +46,12 @@ func main() {
 	}
 	cfg, err := plugins.NewConfigFromBytes(data)
 	if validateCfg {
-		if err == nil {
-			log.Info("configuration is valid, exiting.")
-			os.Exit(0)
+		if err != nil {
+			log.Error(err)
+			os.Exit(1)
 		}
+		log.Info("[OK]")
+		os.Exit(0)
 	}
 	if wipeDB {
 		con := comms.NewConnection(cfg.Database, cfg.Size)

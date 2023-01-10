@@ -11,61 +11,76 @@ database: localhost:6379
 # begins with a name entry.
 plugins:
 
-  # github issues to track
-  github_issues:
-
-    - name: my issues
-      token: <my redacted token>
-      # a list of states, as those exposed by the GitHub UI. Used to filter, if they exist.
-      states:
-        - open
-      repositories:
-        - someorg/repository
-        - someotherorg/repository
-
-    - name: my other issues
-      token: <my redacted token>
+  github:
+    token: <my redacted token>
+    subscriptions:
+      releases:
+        - name: statii releases
+          repositories:
+            - chayim/statii
+        - name: interesting tools
+          repositories:
+            - redis/redis
+            - django/django
 
       # a list of states, as those exposed by the GitHub UI. Used to filter, if they exist.
-      states:
-        - closed
+      issues:
+        - name: my issues
+          states:
+            - open
+            - closed
+          repositories:
+            - chayim/statii
 
-      repositories:
-        - thisorgtoo/foorepo
+        - name: closed issues
 
-  # github pull requests to display
-  github_pullrequests:
-    - name: pull request on thisorg
-      token: <my redacted token>
-      states:
-        - merged
-      repositories:
-        - thisorgtoo/foorepo
+          # a list of states, as those exposed by the GitHub UI. Used to filter, if they exist.
+          states:
+            - closed
 
-  # update the table, when these web pages chanage
-  webpages:
-    - name: These google searches
-      urls:
-        - http://google.com/search?foo
-        - http://google.com/search?bar
+          repositories:
+            - redis/redis
 
-    # a second example, for a web page using HTTP Basic Auth
-    - name: Authenticated page
-      username: human
-      password: being
-      urls:
-        - https://my.network
+      # github pull requests to display
+      pullrequests:
+        - name: pull request on thisorg
+          states:
+            - merged
+          repositories:
+            - chayim/statii
+
+      # github actions whose status should be tracked
+      actions:
+        - name: actions for redis-py
+          repository: redis/redis-py
+
+          # each workflow must be a separate file in the .github/workflows directory for the repository
+          workflows:
+            - integration.yml
+            - stale-issues.yml
+          branches:
+            - master
+
+        # actions without a branch filter
+        - name: actions for redis-py
+          repository: redis/redis-py
+
+          # each workflow must be a separate file in the .github/workflows directory for the repository
+          workflows:
+            - integration.yml
+
+
+    # update the table, when these web pages chanage
+    webpages:
+      - name: These google searches
+        urls:
+          - http://google.com/search?foo
+          - http://google.com/search?bar
+
+      # a second example, for a web page using HTTP Basic Auth
+      - name: Authenticated page
+        username: human
+        password: being
+        urls:
+          - https://my.network
         
-  # github actions whose status should be tracked
-  github_actions:
-    - name: actions for redis-py
-      token: <my redacted token>
-      repository:
-        - redis/redis-py
-
-      # each workflow must be a separate file in the .github/workflows directory for the repository
-      workflows:
-        - integration.yml
-        - stale-issues.yml
-      branches:
-        - master

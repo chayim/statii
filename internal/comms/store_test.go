@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var connstr string = "localhost:9876"
+var connstr string = "localhost:6379"
 var size int64 = 25
 
 func messages(num int) []*Message {
