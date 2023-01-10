@@ -84,3 +84,10 @@ plugins:
         urls:
           - https://my.network
         
+  jira:
+    username: <redacted>
+    token: <redacted>
+    endpoint: https://my.jira.com
+    issues:
+      - name: My bugs
+        query: assignee = currentUser()

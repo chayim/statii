@@ -32,19 +32,22 @@ func TestJira(t *testing.T) {
 		lengthNotGreaterThan: 0,
 	}, {
 		name:                 "basic query",
-		query:                "text~well",
+		query:                "assignee = currentUser()",
 		greaterThan:          0,
 		lengthNotGreaterThan: 500,
 	}}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			j := JiraIssue{Username: username,
+			j := JiraConfig{Username: username,
 				Token:    token,
 				Endpoint: endpoint,
-				Query:    tc.query,
 			}
-			messages := j.Gather(context.TODO(), time.Now().AddDate(0, 0, -15))
+			ji := JiraIssue{Query: tc.query}
+			messages := ji.Gather(context.TODO(), j.Username,
+				j.Token,
+				j.Endpoint,
+				time.Now().AddDate(0, 0, -100))
 			assert.True(t, len(messages) <= tc.lengthNotGreaterThan)
 			assert.True(t, len(messages) > tc.greaterThan)
 		})

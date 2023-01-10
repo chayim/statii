@@ -108,12 +108,28 @@ func (c *Config) ProcessPlugins() {
 		}()
 	}
 
-	// for _, g := range c.Plugins.JiraIssues {
-	// 	go func() {
-	// 		g.Gather(ctx, since)
-	// 		wg.Done()
-	// 	}()
-	// }
+	if len(c.Plugins.Jira.Issues) > 0 {
+		wg.Add(1)
+		go func() {
+			log.Debug("processing jira")
+			var sg sync.WaitGroup
+			sg.Add(len(c.Plugins.Jira.Issues))
+			for _, g := range c.Plugins.Jira.Issues {
+				go func() {
+					messages := g.Gather(ctx,
+						c.Plugins.Jira.Username,
+						c.Plugins.Jira.Token,
+						c.Plugins.Jira.Endpoint,
+						since,
+					)
+					con.SaveMany(ctx, messages)
+					sg.Done()
+				}()
+			}
+			sg.Wait()
+			wg.Done()
+		}()
+	}
 
 	wg.Wait()
 

@@ -18,9 +18,9 @@ type Config struct {
 
 // plugins
 type Plugin struct {
-	GitHub     GitHubConfig `yaml:"github,omitempty"`
-	URLs       []URLConfig  `yaml:"webpages,omitempty"`
-	JiraIssues []JiraIssue  `yaml:"jira_issues,omitempty"`
+	GitHub GitHubConfig `yaml:"github,omitempty"`
+	URLs   []URLConfig  `yaml:"webpages,omitempty"`
+	Jira   JiraConfig   `yaml:"jira,omitempty"`
 }
 
 type PluginBase struct {

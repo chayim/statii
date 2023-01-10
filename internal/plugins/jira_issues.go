@@ -12,21 +12,25 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+type JiraConfig struct {
+	Username string      `yaml:"username"`
+	Token    string      `yaml:"token"`
+	Endpoint string      `yaml:"endpoint"`
+	Issues   []JiraIssue `yaml:"issues"`
+}
+
 type JiraIssue struct {
-	Username string `yaml:"username"`
-	Token    string `yaml:"token"`
-	Endpoint string `yaml:"endpoint"`
-	Query    string `yaml:"query"`
+	Query string `yaml:"query"`
 	PluginBase
 }
 
-func (j *JiraIssue) Gather(ctx context.Context, since time.Time) []*comms.Message {
+func (j *JiraIssue) Gather(ctx context.Context, user string, pass string, endpoint string, since time.Time) []*comms.Message {
 	ts := jira.BasicAuthTransport{
-		Username: j.Username,
-		Password: j.Token,
+		Username: user,
+		Password: pass,
 	}
 
-	client, err := jira.NewClient(ts.Client(), j.Endpoint)
+	client, err := jira.NewClient(ts.Client(), endpoint)
 	if err != nil {
 		log.Errorf("error on %s: %v", j.Name, err)
 		return nil
@@ -46,7 +50,7 @@ func (j *JiraIssue) Gather(ctx context.Context, since time.Time) []*comms.Messag
 		return nil
 	}
 
-	baseURL, _ := url.Parse(j.Endpoint)
+	baseURL, _ := url.Parse(endpoint)
 	source := fmt.Sprintf("Jira %s", j.Name)
 	var messages []*comms.Message
 	for _, issue := range issues {
